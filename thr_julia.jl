@@ -1,25 +1,28 @@
+# BROKEN
+using Random
 using BenchmarkTools
 
-function sqrt_array(A)
-    B = similar(A)
-    for i in eachindex(A)
-        @inbounds B[i] = sqrt(A[i])
+function gaussians(x, M, W)
+    B = similar(M)
+    for i in eachindex(M)
+        @inbounds B[i] = exp(-0.5 * ((x - M[i])/W[i])^2 / W[i] )
     end
-    B
+    B ./ sqrt(2*π) ./ size(B)
 end
 
 using Base.Threads
 
-function threaded_sqrt_array(A)
-    B = similar(A)
-    @threads for i in eachindex(A)
-        @inbounds B[i] = sqrt(A[i])
+function threaded_gaussians(x, M, W)
+    B = similar(M)
+    @threads for i in eachindex(M)
+        @inbounds B[i] = exp.(-0.5 * ((x.*ones(size(M)) - M) ./ W).^2 ./ W)
     end
-    B
+    B ./ sqrt(2*π) ./ size(B)
 end
 
-A = rand(1000, 1000)
-@btime sqrt_array(A);
-@btime threaded_sqrt_array(A);
+M = rand(1_000_000) .* 2. .- 1.;
+W = rand(1_000_000) .* 0.2 .+ 0.1;
+@btime gaussians(0.4, M, W);
+@btime threaded_gaussians(0.4, M, W);
 
-sqrt_array(A) ≈ threaded_sqrt_array(A)
+gaussians(A) ≈ threaded_gaussians(0.4, M, W)
