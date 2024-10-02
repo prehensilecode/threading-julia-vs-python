@@ -1,4 +1,3 @@
-# BROKEN
 using Random
 using BenchmarkTools
 
