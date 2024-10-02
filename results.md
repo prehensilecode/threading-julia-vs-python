@@ -16,8 +16,8 @@ Julia 1.10.5
 
 Code run with: `julia --threads 4 thr_julia.jl`
 
-Desc.        | Time                                      | Speedup | Speedup over Python (threads)
--------------|-------------------------------------------|---------|------------------------------
+Desc.        | Time                                      | Speedup | Speedup over serial Python
+-------------|-------------------------------------------|---------|---------------------------
 No threads   | 8.890e-03 sec (4 allocations: 15.26 MiB)  | 1X      | 24.21X
 Threads      | 3.112e-03 sec (25 allocations: 15.26 MiB) | 2.85X   | 69.24X
 
